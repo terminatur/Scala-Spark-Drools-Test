@@ -1,0 +1,51 @@
+package drivingAction.rules
+
+import DomainObjects.*
+import Enumerations.*
+import JavaEnumerations.*
+import JavaDomainObjects.*
+
+
+declare IsWild
+  condition: DrivingConditions
+end
+
+//dialect "mvel"
+//no-loop
+
+
+rule "Is In Boston"
+  when
+    DrivingConditions(cityName == "Boston")
+  then
+    System.out.println("Is in Boston");
+end
+
+rule "Is not in Boston"
+  when
+    $dc: DrivingConditions(cityName != "Boston")
+  then
+//    modify($dc) { setCityName("Not in Boston") }
+    $dc.setCityName("Not in BOSton");
+    System.out.println("Is NOT in Boston");
+end
+
+rule "Determine Action"
+  when
+    $dc: DrivingConditions(cityName == "Boston", lightColor == LightColor.Green)
+//    IsWild(condition == $dc)
+  then
+    System.out.println("Traffic light color is green");
+    //$dc.cityName = "New City";
+    $dc.setCityName("NewCity");
+//    insertLogical($dc);
+end
+
+
+rule "Java rule 1"
+  when
+    $jdc: JavaDrivingCondition(cityName == "Boston")
+  then
+    System.out.println("Java Obj Traffic light color is green");
+    $jdc.cityName = "New Java City Name"
+end
